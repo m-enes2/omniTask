@@ -18,12 +18,12 @@ class FileReader(Task):
         file_name = self.config.get('file_name')
         if file_name is None:
             self.logger.error("File name not specified")
-            return TaskResult(success=False, error="File name not specified", output=None)
+            return TaskResult(success=False, error=ValueError("File name not specified"), output={})
         
         path = Path(file_name)
         if path.is_file() is False:
             self.logger.error("File not found")
-            return TaskResult(success=False, error="File not found", output=None)
+            return TaskResult(success=False, error=FileNotFoundError("File not found"), output={})
 
         with open(file_name, "r") as file:
             content = file.read()
@@ -34,4 +34,4 @@ class FileReader(Task):
                 }
             )
         
-        return TaskResult(success=False, error="Error while reading file", output=None)
+        return TaskResult(success=False, error=IOError("Error while reading file"), output={})

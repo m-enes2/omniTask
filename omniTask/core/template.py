@@ -67,8 +67,10 @@ class WorkflowTemplate:
 
             if 'max_retry' in task_config:
                 max_retry = task_config['max_retry']
-                if max_retry > 0:
-                    config['max_retry'] = max_retry
+                if not isinstance(int) or max_retry <= 0:
+                    raise ValueError(f"Invalid max_retry value for task {task_name}: must be a non-negative integer")
+                
+                config['max_retry'] = max_retry
 
             task = workflow.create_task(task_type, task_name, config)
 
